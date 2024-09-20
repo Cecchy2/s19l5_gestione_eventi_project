@@ -1,5 +1,6 @@
 package dariocecchinato.s19l5_gestione_eventi_project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dariocecchinato.s19l5_gestione_eventi_project.Enum.Ruolo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties({"password", "role", "authorities", "enabled", "accountNonLocked", "accountNonExpired", "credentialsNonExpired"})
 public class Organizzatore extends Utente{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

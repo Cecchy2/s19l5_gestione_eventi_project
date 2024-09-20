@@ -1,5 +1,8 @@
 package dariocecchinato.s19l5_gestione_eventi_project.controllers;
 
+
+import dariocecchinato.s19l5_gestione_eventi_project.entities.Evento;
+import dariocecchinato.s19l5_gestione_eventi_project.entities.Utente;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.BadRequestException;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoCreatoResponseDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoPayloadDTO;
@@ -7,6 +10,7 @@ import dariocecchinato.s19l5_gestione_eventi_project.services.EventiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,21 +24,14 @@ public class EventiController {
     private EventiService eventiService;
 
 
-    @PostMapping("/register")
-    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
-    @ResponseStatus(HttpStatus.CREATED)
-    public EventoCreatoResponseDTO save(@RequestBody @Validated EventoPayloadDTO body, BindingResult validationResult) {
+    /*@GetMapping
+    public List<Evento> listaEventi() {
+        return eventiService.trovaEventiFuturi();
+    }*/
 
-        if (validationResult.hasErrors()) {
-            String messages = validationResult.getAllErrors().stream()
-                    .map(objectError -> objectError.getDefaultMessage())
-                    .collect(Collectors.joining(". "));
-
-            throw new BadRequestException("Ci sono stati errori nel payload. " + messages);
-        } else {
-
-            return new EventoCreatoResponseDTO(this.eventiService.save(body).getId());
-        }
-
+    @PostMapping("/organizzatori")
+    public Evento creaEvento(@RequestBody Evento evento, Authentication authentication) {
+        Utente organizzatore = (Utente) authentication;
+        return eventiService.save(evento, organizzatore);
     }
 }

@@ -1,26 +1,43 @@
 package dariocecchinato.s19l5_gestione_eventi_project.services;
 
 import dariocecchinato.s19l5_gestione_eventi_project.entities.Evento;
-import dariocecchinato.s19l5_gestione_eventi_project.entities.Organizzatore;
-import dariocecchinato.s19l5_gestione_eventi_project.exceptions.BadRequestException;
-import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoPayloadDTO;
+
+import dariocecchinato.s19l5_gestione_eventi_project.entities.Utente;
+
+import dariocecchinato.s19l5_gestione_eventi_project.exceptions.UnauthorizedException;
+
 import dariocecchinato.s19l5_gestione_eventi_project.repositories.EventiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class EventiService {
     @Autowired
     private EventiRepository eventiRepository;
-    @Autowired
-    private OrganizzatoriService organizzatoriService;
 
 
-    public Evento save (EventoPayloadDTO body){
-        Organizzatore organizzatore = organizzatoriService.findById(body.organizzatoreId());
-        Evento newEvento = new Evento(body.titolo(), body.descrizione(), body.data_evento(), body.luogo_evento(), body.numero_posti(), organizzatore);
-        return eventiRepository.save(newEvento);
+
+    public Evento save (Evento evento, Utente organizzatore){
+        evento.setOrganizzatore(organizzatore);
+        evento.setNumero_posti(evento.getNumero_posti());
+        return eventiRepository.save(evento);
+    }
+
+    public Optional<Evento> trovaPerId(UUID id) {
+        return eventiRepository.findById(id);
+    }
+
+    public void eliminaEvento(UUID id, Utente organizzatore) {
+        Optional<Evento> evento = eventiRepository.findById(id);
+        if (evento.isPresent() && evento.get().getOrganizzatore().equals(organizzatore)) {
+            eventiRepository.delete(evento.get());
+        } else {
+            throw new UnauthorizedException("Errore nella rimozione");
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,7 +31,9 @@ public class OrganizzatoriService {
     }
 
     public Organizzatore findById(UUID organizzatoreId){
-        return this.organizzatoriRepository.findById(organizzatoreId).orElseThrow(()-> new NotFoundException(organizzatoreId));
+        System.out.println("organizzatore " + organizzatoreId);
+        Organizzatore found= this.organizzatoriRepository.findById(organizzatoreId).orElseThrow(()-> new NotFoundException(organizzatoreId));
+        return found;
     }
 
     public List<Organizzatore> findAll(){

@@ -15,17 +15,5 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/spettatori")
 public class SpettatoriController {
-    @Autowired
-    private SpettatoriService spettatoriService;
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public NewUtenteRespDTO save(@RequestBody @Validated SpettatorePayloadDTO body, BindingResult validationResult){
-        if(validationResult.hasErrors()){
-            String messages= validationResult.getAllErrors().stream()
-                    .map(objectError -> objectError.getDefaultMessage())
-                    .collect(Collectors.joining(". "));
-            throw new BadRequestException("Errori nel Payload. " + messages);
-        }
-    }
 }

@@ -19,4 +19,8 @@ public class UtentiService {
     public Utente findById(UUID userId) {
         return this.utentiRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
     }
+
+    public Utente findUtenteByEmail(String email){
+        return this.utentiRepository.findByEmail(email).orElseThrow(()->new NotFoundException("L' Email" + email + "non è stata trovata"));
+    }
 }

@@ -19,9 +19,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @JsonIgnoreProperties({"password", "role", "authorities", "enabled", "accountNonLocked", "accountNonExpired", "credentialsNonExpired"})
-public abstract class Utente implements UserDetails {
+public class Utente implements UserDetails {
     @Id
     @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.AUTO)

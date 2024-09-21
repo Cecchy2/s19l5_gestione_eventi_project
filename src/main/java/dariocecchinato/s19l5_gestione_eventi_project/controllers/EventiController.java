@@ -9,6 +9,7 @@ import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoPayloadDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.services.EventiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,17 @@ public class EventiController {
     public Evento findById(@PathVariable UUID eventoId){
         if (eventoId == null) throw new BadRequestException("Devi inserire un id ");
         return this.eventiService.trovaPerId(eventoId ).orElseThrow(()->new NotFoundException(eventoId));
+    }
+
+    @PutMapping("/{eventoId}")
+    public Evento findByIdAndUpdate(@PathVariable UUID eventoId, @RequestBody EventoPayloadDTO body){
+        return this.eventiService.findByIdAndUpdate(eventoId, body);
+    }
+
+    @DeleteMapping("/{eventoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void findByIdAndDelete(@PathVariable UUID eventoId){
+        eventiService.findByIdAndDelete(eventoId);
     }
 
 

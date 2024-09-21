@@ -12,4 +12,6 @@ import java.util.UUID;
 @Repository
 public interface PrenotazioniRepository extends JpaRepository<Prenotazione, UUID> {
     List<Prenotazione> findByUtente(Utente utente);
+
+    List<Prenotazione> findByEvento_Id (UUID eventoId);
 }

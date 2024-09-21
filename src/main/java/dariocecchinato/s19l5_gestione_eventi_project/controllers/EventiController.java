@@ -1,11 +1,13 @@
 package dariocecchinato.s19l5_gestione_eventi_project.controllers;
 
+
+import dariocecchinato.s19l5_gestione_eventi_project.entities.Evento;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.BadRequestException;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoCreatoResponseDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoPayloadDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.services.EventiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,7 @@ public class EventiController {
 
 
     @PostMapping("/organizzatori")
-    @PreAuthorize("hasRole('ORGANIZZATORE')")
+    //@PreAuthorize("hasRole('ORGANIZZATORE')")
     public EventoCreatoResponseDTO creaEvento(@RequestBody EventoPayloadDTO body, BindingResult validationResult) {
         System.out.println("Payload ricevuto: " + body);
         if (validationResult.hasErrors()) {
@@ -33,5 +35,14 @@ public class EventiController {
             return new EventoCreatoResponseDTO(this.eventiService.save(body).getId());
         }
     }
+
+    @GetMapping
+    public Page<Evento> getAllEventi (@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size,
+                                      @RequestParam(defaultValue = "id") String sortBy){
+        return  this.eventiService.findAll(page, size, sortBy);
+    }
+
+
 
 }

@@ -1,5 +1,6 @@
 package dariocecchinato.s19l5_gestione_eventi_project.repositories;
 
+
 import dariocecchinato.s19l5_gestione_eventi_project.entities.Prenotazione;
 import dariocecchinato.s19l5_gestione_eventi_project.entities.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;

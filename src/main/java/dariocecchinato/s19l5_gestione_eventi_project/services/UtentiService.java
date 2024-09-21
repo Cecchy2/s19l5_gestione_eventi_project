@@ -1,10 +1,10 @@
 package dariocecchinato.s19l5_gestione_eventi_project.services;
 
 
+
 import dariocecchinato.s19l5_gestione_eventi_project.entities.Utente;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.BadRequestException;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.NotFoundException;
-
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.UtentePayloadDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.repositories.UtentiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,16 @@ public class UtentiService {
     @Autowired
     private PasswordEncoder bcrypt;
 
+    public Utente registraUtente(UtentePayloadDTO body) {
+        this.utentiRepository.findByEmail(body.email()).ifPresent(
+                utente->{
+                    throw new BadRequestException("L'email " + body.email() + " è già in uso!");
+                }
+        );
+        Utente newUtente= new Utente(body.nome(),body.cognome(), body.email(), bcrypt.encode(body.password()), body.ruolo());
+        return this.utentiRepository.save(newUtente);
+    }
+
     public Utente findById(UUID userId) {
         return this.utentiRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
     }
@@ -38,22 +48,5 @@ public class UtentiService {
         return this.utentiRepository.findByEmail(email).orElseThrow(()->new NotFoundException("L' Email" + email + "non è stata trovata"));
     }
 
-    /*public Utente save(UtentePayloadDTO body){
-        this.utentiRepository.findByEmail(body.email()).ifPresent(
-                utente->{
-                    throw new BadRequestException("L'email " + body.email() + " è già in uso!");
-                }
-        );
-        Utente newUtente = new Utente(body.nome(), body.cognome(), body.email(), bcrypt.encode(body.password()), body.ruolo());
-        return this.utentiRepository.save(newUtente);
-    }*/
-    public Utente registraUtente(UtentePayloadDTO body) {
-        this.utentiRepository.findByEmail(body.email()).ifPresent(
-                utente->{
-                    throw new BadRequestException("L'email " + body.email() + " è già in uso!");
-                }
-        );
-        Utente newUtente= new Utente(body.nome(),body.cognome(), body.email(), bcrypt.encode(body.password()), body.ruolo());
-        return this.utentiRepository.save(newUtente);
-    }
+
 }

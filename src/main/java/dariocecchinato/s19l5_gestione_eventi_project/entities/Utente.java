@@ -1,6 +1,7 @@
 package dariocecchinato.s19l5_gestione_eventi_project.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import dariocecchinato.s19l5_gestione_eventi_project.Enum.Ruolo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,5 +1,7 @@
 package dariocecchinato.s19l5_gestione_eventi_project.payloads;
 
+
+
 import dariocecchinato.s19l5_gestione_eventi_project.Enum.Ruolo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

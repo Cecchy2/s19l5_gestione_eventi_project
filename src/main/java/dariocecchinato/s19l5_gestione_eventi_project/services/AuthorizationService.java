@@ -25,19 +25,5 @@ public class AuthorizationService {
             throw new UnauthorizedException("Errore nelle credenziali che hai fornito");
         }
     }
-   /* public String checkCredenzialiAndGenerateToken(UtenteLoginDTO body) {
-        Utente found = this.utentiService.findUtenteByEmail(body.email());
-        if (found == null) {
-            throw new UnauthorizedException("Email non trovata");
-        }
-
-        System.out.println("Password fornita: " + body.password());
-        System.out.println("Password salvata: " + found.getPassword());
-
-        if (!body.password().equals(found.getPassword())) {
-            throw new UnauthorizedException("Errore nelle credenziali che hai fornito");
-        }
-
-        return this.jwtTools.createToken(found);
-    }*/
+   
 }

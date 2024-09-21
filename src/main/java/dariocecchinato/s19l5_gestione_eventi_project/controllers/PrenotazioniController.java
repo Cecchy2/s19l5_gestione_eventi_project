@@ -7,12 +7,14 @@ import dariocecchinato.s19l5_gestione_eventi_project.services.EventiService;
 import dariocecchinato.s19l5_gestione_eventi_project.services.PrenotazioniService;
 import dariocecchinato.s19l5_gestione_eventi_project.services.UtentiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,5 +36,17 @@ public class PrenotazioniController {
         }else{
             return this.prenotazioniService.creaPrenotazione(body);
         }
+    }
+
+    @GetMapping
+    public Page<Prenotazione> getAllPrenotazioni (@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size,
+                                                  @RequestParam(defaultValue = "id") String sortBy){
+        return  this.prenotazioniService.findAll(page, size, sortBy);
+    }
+
+    @GetMapping("/{prenotazioneId}")
+    public Prenotazione findById (@PathVariable UUID prenotazioneId){
+        return this.prenotazioniService.findById(prenotazioneId);
     }
 }

@@ -21,7 +21,7 @@ public class PrenotazioniService {
     @Autowired
     private EventiService eventiService;
 
-    public Prenotazione prenotaPosto(UUID eventoId, Utente utente) {
+    /*public Prenotazione prenotaPosto(UUID eventoId, Utente utente) {
         Optional<Evento> evento = eventiService.trovaPerId(eventoId);
         if (evento.isPresent() && evento.get().getNumero_posti() > 0) {
             Prenotazione prenotazione = new Prenotazione();
@@ -45,6 +45,6 @@ public class PrenotazioniService {
             prenotazioniRepository.delete(prenotazione.get());
         } else {
             throw new UnauthorizedException("Errore durante la cancellazione");
-        }}
+        }}*/
 
 }

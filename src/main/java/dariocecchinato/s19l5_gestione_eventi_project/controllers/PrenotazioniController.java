@@ -16,7 +16,7 @@ import java.util.UUID;
         @Autowired
         private PrenotazioniService prenotazioniService;
 
-        @PostMapping("/{eventoId}")
+        /*@PostMapping("/{eventoId}")
         public Prenotazione prenotaPosto(@PathVariable UUID eventoId, Authentication authentication) {
             Utente utente = (Utente) authentication.getPrincipal();
             return prenotazioniService.prenotaPosto(eventoId, utente);
@@ -26,7 +26,7 @@ import java.util.UUID;
         public void cancellaPrenotazione(@PathVariable UUID prenotazioneId, Authentication authentication) {
             Utente utente = (Utente) authentication.getPrincipal();
             prenotazioniService.cancellaPrenotazione(prenotazioneId, utente);
-        }
+        }*/
     }
 
 

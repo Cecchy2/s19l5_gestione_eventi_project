@@ -1,10 +1,7 @@
 package dariocecchinato.s19l5_gestione_eventi_project.entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -26,9 +23,9 @@ public class Prenotazione {
     @JoinColumn(name = "evento_id")
     private Evento evento;
 
-    public Prenotazione(LocalDate data_prenotazione, Evento evento) {
+    public Prenotazione(LocalDate data_prenotazione, Evento evento, Utente utente) {
         this.data_prenotazione = data_prenotazione;
-
         this.evento = evento;
+        this.utente = utente;
     }
 }

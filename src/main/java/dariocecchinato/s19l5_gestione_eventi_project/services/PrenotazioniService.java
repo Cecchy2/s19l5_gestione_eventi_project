@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,15 +34,17 @@ public class PrenotazioniService {
         UUID eventoId = body.eventoId();
         UUID utenteId = body.utenteId();
 
-        /*if (prenotazioniRepository.existsByDipendenteIdAndViaggioDataViaggio(dipendenteId,dataViaggio)){
-            throw new BadRequestException("Il dipendente " + body.dipendente_id() + " ha già un viaggio prenotato per quella data");
-        }else{*/
         Evento evento = eventiService.trovaPerId(eventoId).orElseThrow(()-> new NotFoundException(eventoId));
+
         Utente utente= utentiService.findById(utenteId);
 
-        Prenotazione prenotazione = new Prenotazione(dataPrenotazione, evento, utente);
-
+        List<Prenotazione> prenotazioniEsistenti = prenotazioniRepository.findByEvento_Id(eventoId);
+        if (prenotazioniEsistenti.size() < evento.getNumero_posti()) {
+            Prenotazione prenotazione = new Prenotazione(dataPrenotazione, evento, utente);
             return prenotazioniRepository.save(prenotazione);
+        } else {
+            throw new BadRequestException("Non ci sono posti disponibili per questo evento.");
+        }
         }
 
     public Page<Prenotazione> findAll (int page, int size, String sortby){

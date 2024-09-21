@@ -3,6 +3,7 @@ package dariocecchinato.s19l5_gestione_eventi_project.controllers;
 
 import dariocecchinato.s19l5_gestione_eventi_project.entities.Evento;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.BadRequestException;
+import dariocecchinato.s19l5_gestione_eventi_project.exceptions.NotFoundException;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoCreatoResponseDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoPayloadDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.services.EventiService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,6 +45,11 @@ public class EventiController {
         return  this.eventiService.findAll(page, size, sortBy);
     }
 
+    @GetMapping("/{eventoId}")
+    public Evento findById(@PathVariable UUID eventoId){
+        if (eventoId == null) throw new BadRequestException("Devi inserire un id ");
+        return this.eventiService.trovaPerId(eventoId ).orElseThrow(()->new NotFoundException(eventoId));
+    }
 
 
 }

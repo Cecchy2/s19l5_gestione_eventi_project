@@ -63,21 +63,32 @@ public class EventiService {
 
         Utente organizzatore= this.utentiRepository.findById(body.organizzatoreId()).orElseThrow(()->new NotFoundException(eventoId));
         Evento found = this.eventiRepository.findById(eventoId).orElseThrow(()->new NotFoundException(eventoId));
-        found.setTitolo(body.titolo());
-        found.setDescrizione(body.descrizione());
-        found.setData_evento(body.data_evento());
-        found.setLuogo_evento(body.luogo_evento());
-        found.setNumero_posti(body.numero_posti());
-        found.setOrganizzatore(organizzatore);
-        return found;
+        if (found.getOrganizzatore().getId().equals(organizzatore.getId())) {
+            found.setTitolo(body.titolo());
+            found.setDescrizione(body.descrizione());
+            found.setData_evento(body.data_evento());
+            found.setLuogo_evento(body.luogo_evento());
+            found.setNumero_posti(body.numero_posti());
+            found.setOrganizzatore(organizzatore);
+            return found;
+        }else{
+            throw new UnauthorizedException("Non hai i permessi per modificare questo evento.");
+        }
+
     }
 
-    public void findByIdAndDelete(UUID eventoId){
-        List<Prenotazione> prenotazioniPerEvento= this.prenotazioniRepository.findByEvento_Id(eventoId);
-        if (!prenotazioniPerEvento.isEmpty()){
+    public void findByIdAndDelete(UUID eventoId, Utente organizzatore) {
+        Evento found = this.eventiRepository.findById(eventoId)
+                .orElseThrow(() -> new NotFoundException(eventoId));
+
+        if (!found.getOrganizzatore().getId().equals(organizzatore.getId())) {
+            throw new UnauthorizedException("Non hai i permessi per cancellare questo evento.");
+        }
+
+        List<Prenotazione> prenotazioniPerEvento = this.prenotazioniRepository.findByEvento_Id(eventoId);
+        if (!prenotazioniPerEvento.isEmpty()) {
             this.prenotazioniRepository.deleteAll(prenotazioniPerEvento);
         }
-        Evento found = this.eventiRepository.findById(eventoId).orElseThrow(()->new NotFoundException(eventoId));
         eventiRepository.delete(found);
     }
 }

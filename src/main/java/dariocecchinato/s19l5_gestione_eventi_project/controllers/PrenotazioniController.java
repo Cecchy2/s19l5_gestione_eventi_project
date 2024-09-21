@@ -29,6 +29,7 @@ public class PrenotazioniController {
 
     @PostMapping("/spettatori")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('SPETTATORE')")
     public Prenotazione savePrenotazione(@RequestBody @Validated PrenotazionePayloadDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()){
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage()).collect(Collectors.joining(" ."));
@@ -38,7 +39,7 @@ public class PrenotazioniController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/me")
     public Page<Prenotazione> getAllPrenotazioni (@RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "10") int size,
                                                   @RequestParam(defaultValue = "id") String sortBy){
@@ -46,6 +47,7 @@ public class PrenotazioniController {
     }
 
     @GetMapping("/{prenotazioneId}")
+    @PreAuthorize("hasRole('SPETTATORE')")
     public Prenotazione findById (@PathVariable UUID prenotazioneId){
         return this.prenotazioniService.findById(prenotazioneId);
     }

@@ -5,6 +5,7 @@ import dariocecchinato.s19l5_gestione_eventi_project.entities.Evento;
 import dariocecchinato.s19l5_gestione_eventi_project.entities.Utente;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.BadRequestException;
 import dariocecchinato.s19l5_gestione_eventi_project.exceptions.NotFoundException;
+import dariocecchinato.s19l5_gestione_eventi_project.exceptions.ResponseStatusException;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoCreatoResponseDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.payloads.EventoPayloadDTO;
 import dariocecchinato.s19l5_gestione_eventi_project.services.EventiService;
@@ -27,7 +28,6 @@ public class EventiController {
 
 
     @PostMapping("/organizzatori")
-    @PreAuthorize("hasRole('ORGANIZZATORE')")
     public EventoCreatoResponseDTO creaEvento(@RequestBody EventoPayloadDTO body, BindingResult validationResult) {
         System.out.println("Payload ricevuto: " + body);
         if (validationResult.hasErrors()) {
@@ -56,17 +56,28 @@ public class EventiController {
     }
 
     @PutMapping("/{eventoId}")
-    @PreAuthorize("hasRole('ORGANIZZATORE')")
     public Evento findByIdAndUpdate(@PathVariable UUID eventoId, @RequestBody EventoPayloadDTO body){
+        Utente organizzatore = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Evento evento = eventiService.trovaPerId(eventoId).orElseThrow(()->new NotFoundException(eventoId));
+
+        if (!evento.getOrganizzatore().getId().equals(organizzatore.getId())) {
+            throw new ResponseStatusException(eventoId);
+        }
         return this.eventiService.findByIdAndUpdate(eventoId, body);
     }
 
     @DeleteMapping("/{eventoId}")
-    @PreAuthorize("hasRole('ORGANIZZATORE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID eventoId){
         Utente organizzatore = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        Evento evento = eventiService.trovaPerId(eventoId).orElseThrow(()->new NotFoundException(eventoId));
+
+        if (!evento.getOrganizzatore().getId().equals(organizzatore.getId())) {
+            throw new ResponseStatusException(eventoId);
+        }
+        System.out.println("Ruoli utente: " + organizzatore.getAuthorities());
         eventiService.findByIdAndDelete(eventoId,organizzatore);
     }
 

@@ -29,16 +29,5 @@ public class UtentiController {
         return this.utentiService.findAll(page, size, sortby);
     }
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public NewUtenteRespDTO save(@RequestBody @Validated UtentePayloadDTO body, BindingResult validationResult){
-        if(validationResult.hasErrors()){
-            String messages= validationResult.getAllErrors().stream()
-                    .map(objectError -> objectError.getDefaultMessage())
-                    .collect(Collectors.joining(". "));
-            throw new BadRequestException("Errori nel Payload. " + messages);
-        }else{
-            return new NewUtenteRespDTO(this.utentiService.registraUtente(body).getId());
-        }
-    }
+
 }

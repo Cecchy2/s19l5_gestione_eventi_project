@@ -18,6 +18,11 @@ public class ExceptionsHandler {
 	public ErrorPayloadDTO handleBadRequest(BadRequestException ex) {
 		return new ErrorPayloadDTO(ex.getMessage(), LocalDateTime.now());
 	}
+	@ExceptionHandler(ResponseStatusException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public ErrorPayloadDTO handleResponseStatus(ResponseStatusException ex){
+		return new ErrorPayloadDTO(ex.getMessage(), LocalDateTime.now());
+	}
 
 	@ExceptionHandler(UnauthorizedException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED) // 401

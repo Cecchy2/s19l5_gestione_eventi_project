@@ -29,7 +29,7 @@ public class PrenotazioniController {
 
     @PostMapping("/spettatori")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('SPETTATORE')")
+    @PreAuthorize("hasAuthority('SPETTATORE')")
     public Prenotazione savePrenotazione(@RequestBody @Validated PrenotazionePayloadDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()){
             String message = validationResult.getAllErrors().stream().map(objectError -> objectError.getDefaultMessage()).collect(Collectors.joining(" ."));
@@ -47,7 +47,7 @@ public class PrenotazioniController {
     }
 
     @GetMapping("/{prenotazioneId}")
-    @PreAuthorize("hasRole('SPETTATORE')")
+    @PreAuthorize("hasAuthority('SPETTATORE')")
     public Prenotazione findById (@PathVariable UUID prenotazioneId){
         return this.prenotazioniService.findById(prenotazioneId);
     }

@@ -28,6 +28,7 @@ public class EventiController {
 
 
     @PostMapping("/organizzatori")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     public EventoCreatoResponseDTO creaEvento(@RequestBody EventoPayloadDTO body, BindingResult validationResult) {
         System.out.println("Payload ricevuto: " + body);
         if (validationResult.hasErrors()) {
@@ -56,6 +57,7 @@ public class EventiController {
     }
 
     @PutMapping("/{eventoId}")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     public Evento findByIdAndUpdate(@PathVariable UUID eventoId, @RequestBody EventoPayloadDTO body){
         Utente organizzatore = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -68,6 +70,7 @@ public class EventiController {
     }
 
     @DeleteMapping("/{eventoId}")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID eventoId){
         Utente organizzatore = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

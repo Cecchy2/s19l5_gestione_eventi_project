@@ -2,7 +2,7 @@ package dariocecchinato.s19l5_gestione_eventi_project.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import dariocecchinato.s19l5_gestione_eventi_project.Enum.Ruolo;
+import dariocecchinato.s19l5_gestione_eventi_project.Enum.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,9 +31,9 @@ public class Utente implements UserDetails {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Ruolo ruolo;
+    private Role ruolo;
 
-    public Utente(String nome, String cognome, String email, String password, Ruolo ruolo) {
+    public Utente(String nome, String cognome, String email, String password, Role ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;

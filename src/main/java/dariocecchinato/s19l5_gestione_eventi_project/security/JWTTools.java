@@ -19,6 +19,7 @@ public class JWTTools {
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+1000*60*60*24*14))
                 .subject(String.valueOf(utente.getId()))
+                .claim("roles", utente.getAuthorities())
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }

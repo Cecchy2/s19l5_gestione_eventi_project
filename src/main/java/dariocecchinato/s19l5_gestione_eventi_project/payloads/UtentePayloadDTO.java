@@ -2,7 +2,7 @@ package dariocecchinato.s19l5_gestione_eventi_project.payloads;
 
 
 
-import dariocecchinato.s19l5_gestione_eventi_project.Enum.Ruolo;
+import dariocecchinato.s19l5_gestione_eventi_project.Enum.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -21,5 +21,5 @@ public record UtentePayloadDTO(
         @NotEmpty(message = "Devi inserire una email")
         String password,
         @NotNull(message = "sei un ORGANIZZATORE o uno SPETTATORE?")
-        Ruolo ruolo) {
+        Role ruolo) {
 }
